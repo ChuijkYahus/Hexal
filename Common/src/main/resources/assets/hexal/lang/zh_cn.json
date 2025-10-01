@@ -385,7 +385,7 @@
   "text.autoconfig.hexal.option.server.itemSpells.tradeItemCost": "“交易”媒质消耗",
   "text.autoconfig.hexal.option.server.itemSpells.maxItemsReturned": "最大返还物品数",
   "text.autoconfig.hexal.option.server.itemSpells.maxItemsReturned.@Tooltip[0]": "“返还物品”单次最多能返还的物品数量。",
-  "text.autoconfig.hexal.option.server.itemSpells.maxItemsReturned.@Tooltip[1]": "取值范围为640到64,000。",
+  "text.autoconfig.hexal.option.server.itemSpells.maxItemsReturned.@Tooltip[1]": "取值范围为640到64000。",
   "text.autoconfig.hexal.option.server.itemSpells.maxRecordsInMediafiedStorage": "物元枢纽最大记录条数",
   "text.autoconfig.hexal.option.server.itemSpells.maxRecordsInMediafiedStorage.@Tooltip[0]": "单个物元枢纽中最多能存储的物元记录条数。",
   "text.autoconfig.hexal.option.server.itemSpells.maxRecordsInMediafiedStorage.@Tooltip[1]": "取值范围为128到16384。",
