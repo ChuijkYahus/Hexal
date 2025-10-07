@@ -5,7 +5,7 @@
 
   "entity.hexal.wisp.projectile": "弹射式咒灵",
   "entity.hexal.wisp.ticking": "循环式咒灵",
-  "entity.hexal.wisp.wandering": "巡航中咒灵",
+  "entity.hexal.wisp.wandering": "游走咒灵",
 
 
   "hexcasting.mishap.non_player": "%s需由玩家执行",
@@ -16,6 +16,7 @@
   "hexcasting.mishap.no_bound_storage": "未绑定物元枢纽",
   "hexcasting.mishap.storage_unloaded": "绑定的物元枢纽未被加载",
   "hexcasting.mishap.excessive_reproduction": "咒灵%s试图过度复制，每刻仅可召唤1个子咒灵",
+  "hexcasting.mishap.illegal_interworld_iota": "试图将iota%s变为跨世界iota，此类型的iota无法加入永恒之书。",
 
   "hexcasting.mishap.invalid_value.class.linkable": "一个可链接的事物",
   "hexcasting.mishap.invalid_value.class.wisp": "一个咒灵",
@@ -51,14 +52,14 @@
 
   "hexal.spelldata.entity_type": "类型",
   "hexal.spelldata.gate": "门径 %d",
-  "hexal.spelldata.mote": "%s x%d",
+  "hexal.spelldata.item": "%s x%d",
+
 
   "hexcasting.spell.hexal:type/iota": "分类学家之纯化",
   "hexcasting.spell.hexal:type/entity": "内科医师之纯化",
   "hexcasting.spell.hexal:type/block_item": "分拣员之纯化",
   "hexcasting.spell.hexal:type/item_held": "分拣员之精思",
 
-  "hexcasting.spell.hexal:raycast/entity/type": "侦查员之提整",
   "hexcasting.spell.hexal:get_entity/type": "实体之馏化：类型",
   "hexcasting.spell.hexal:zone_entity/type": "区域之提整：类型",
   "hexcasting.spell.hexal:zone_entity/not_type": "区域之提整：非类型",
@@ -215,7 +216,7 @@
   "hexal.page.wisps.wisp/summon/ticking.1": "其初始栈包含一个代表其自身的 iota，而后每次施法开始时会保留上一次施法后的栈和渡鸦之思。这种咒灵的形态较不稳定，常态消耗率远大于弹射式咒灵。其每秒消耗 7/10 个$(l:items/amethyst)$(item)紫水晶粉/$。其影响区域半径为 8 格。",
   "hexal.page.wisps.wisp/self": "返回一个代表施法咒灵的 iota。此操作必须由咒灵执行。尝试用法杖执行会招致可怖的事故。",
   "hexal.page.wisps.wisp/media": "将咒灵媒质库中剩余的媒质量压入栈顶。此操作必须由咒灵执行。尝试用法杖执行会招致可怖的事故。",
-  "hexal.page.wisps.wisp/hex": "移除一个咒灵实体，并返回该咒灵所携带的咒术。所给 iota 必须代表由我召唤的咒灵，或$(l:hexal:patterns/spells/wisps#hexal:wisp/transfer/allow)允许$(action)与施法者或其所有者转送的咒灵。",
+  "hexal.page.wisps.wisp/hex": "移除一个咒灵实体，并返回该咒灵所携带的咒术。所给 iota 必须代表由我召唤的咒灵，或$(l:hexal:patterns/spells/wisps#hexal:wisp/transfer/allow)$(action)允许/$与施法者或其所有者转送的咒灵。",
   "hexal.page.wisps.wisp/owner": "移除一个咒灵实体和一个实体，若该实体是该咒灵的所有者，返回 True；否则返回 False。",
   "hexal.page.wisps.wisp/move/target/set": "移除栈顶位置向量。运行此图案的循环式咒灵会沿直线移动至所给位置（会与途中地形地貌等碰撞），直至抵达该位置处。",
   "hexal.page.wisps.wisp/move/target/get": "返回循环式咒灵当前目标位置的位置向量。",
@@ -234,7 +235,7 @@
 
   "hexal.entry.links": "链接",
   "hexal.page.links.0": "这些图案大致构建了一套能在$(l:hexal:patterns/spells/wisps)$(thing)咒灵/$间以及咒灵和其他事物间传递信息的系统。有若干图案与创建链接有关，也有些图案和通过链接发送和接收 iota 的方式相关。一个咒灵能同时维持任意数目的链接，每条每 1/20 秒常态消耗极少量媒质。",
-  "hexal.page.links.1": "可链接事物会以创建顺序为这些链接编号，此编号可用作图案的参数。介绍中的“可链接事物”（Linkable）不是具体参数类型，而是指代所有可被转换为可链接事物的类型。（例如，Entity -> Linkable entities，Vec -> Linkable blocks等等。）链接仅会在两可链接事物影响范围之和的两倍内起效。若要跨更远的距离连接两者，应该转而使用$(l:hexal:items/relay)$(item)继链器/$。",
+  "hexal.page.links.1": "可链接事物会以创建顺序为这些链接编号，此编号可用作图案的参数。介绍中的“可链接事物”（Linkable）不是具体参数类型，而是指代所有可被转换为可链接事物的类型。（例如，Entity -> Linkable entity，Vec -> Linkable block 等等。）链接仅会在两可链接事物影响范围之和的两倍内起效。若要跨更远的距离连接两者，应该转而使用$(l:hexal:items/relay)$(item)继链器/$。",
   "hexal.page.links.link": "将施法者链接至栈顶实体，且实体必须为可链接的。消耗 1 个$(l:items/amethyst)$(item)紫水晶碎片/$。",
   "hexal.page.links.link/others": "可在任意施法器件上运行。将两个实体链接，且两实体必须均为可链接的。消耗 1 个$(l:items/amethyst)$(item)紫水晶碎片/$。",
   "hexal.page.links.link/unlink": "断开施法者的编号为所给数的链接。消耗 2 个$(l:items/amethyst)$(item)紫水晶粉/$。",
@@ -291,24 +292,24 @@
   "hexal.page.motes.mote/trade.0": "接受代表村民的 iota，由物元组成的列表（用于交易），和代表交易次序的整数（可选）。（上方的 int? 表示可传入 2 或 3 个参数，可选的第三个参数需为整数。）",
   "hexal.page.motes.mote/trade.1": "若不输入次序数，则会依次寻找交易选项，直到找到接受所给物品的选项为止。若输入，则会直接跳转至该交易选项处。这之后便会一直进行交易，直到物品耗尽或是村民停用该项为止。交易结束后会返回由所获得的物品组成的物元。",
   "hexal.page.motes.mote/trade.2": "村民会将这些交易视作直接与我进行，且会获得经验，并以此精进技艺并改进交易选项。消耗 1/10 个$(l:items/amethyst)$(item)紫水晶粉/$。",
-  "hexal.page.motes.mote/use_on": "接受一个物元和一个实体或位置向量和法向量。并对实体或所给位置处方块使用物元中物品。物元本身需只能含有一个物品，或其中物品极为简单（无 NBT 数据）。",
+  "hexal.page.motes.mote/use_on": "接受一个物元和一个实体或位置向量和法向量。并对实体或所给位置处方块使用物元中物品。物元本身需只能含有一个物品，除非其中物品极为简单（无 NBT 数据）。",
 
   "hexal.entry.great_wisps": "卓越咒灵法术",
   "hexal.page.great_wisps.wisp/consume.0": "移除栈顶咒灵实体，并拆解该咒灵。咒灵携带的图案不可追回，但是如果此法术是由其他咒灵施放的，那么被拆解咒灵所剩的媒质还可再加利用。",
-  "hexal.page.great_wisps.wisp/consume.1": "若咒灵的所有者是我，或其被$(l:hexal:patterns/spells/wisps#hexal:wisp/transfer/allow)允许$(action)与施法者或其所有者转送，消耗 1 个$(l:items/amethyst)$(item)紫水晶碎片/$；若咒灵的所有者是他人且未被允许转送，则消耗该咒灵所拥有的媒质量的一半。媒质的再利用效率不算特别高，会在传输过程中损耗掉被拆解咒灵媒质库容量的 1/20。",
+  "hexal.page.great_wisps.wisp/consume.1": "若咒灵的所有者是我，或其被$(l:hexal:patterns/spells/wisps#hexal:wisp/transfer/allow)$(action)允许/$与施法者或其所有者转送，消耗 1 个$(l:items/amethyst)$(item)紫水晶碎片/$；若咒灵的所有者是他人且未被允许转送，则消耗该咒灵所拥有的媒质量的一半。媒质的再利用效率不算特别高，会在传输过程中损耗掉被拆解咒灵媒质库容量的 1/20。",
   "hexal.page.great_wisps.wisp/seon/set": "在我的咒灵和我之间建立更紧密的联系。我只能同时绑定一个咒灵，但绑定咒灵的常态消耗将大大减少。",
   "hexal.page.great_wisps.wisp/seon/get": "返回我当前绑定的咒灵。（这并不是卓越法术，记载于此是为了方便查找。）",
 
   "hexal.entry.types": "类型",
   "hexal.page.types.type/iota": "移除栈顶元素，并返回该 iota 的类型。",
   "hexal.page.types.type/entity": "移除栈顶实体，并返回该实体的类型。",
-  "hexal.page.types.type/block_item": "移除栈顶位置向量，$(l:hexal:patterns/spells/motes)$(item)物元/$，物品实体或物品展示框。并返回该处方块的类型或对应物品类型。（如草方块、石头、木棍等。）",
+  "hexal.page.types.type/block_item": "移除栈顶位置向量，$(l:hexal:patterns/spells/motes)$(item)物元/$，物品实体或物品展示框，并返回该处方块的类型或对应物品类型。（如草方块、石头、木棍等。）",
   "hexal.page.types.type/item_held": "若施法者副手中有物品，则将其类型压入栈顶；若无，则压入施法用手中物品的类型。",
 
-  "hexal.page.types.raycast/entity/type": "移除栈顶实体类型（或物品类型）、位置向量和方向向量，返回该位置朝向该方向处符合该类型的实体或物品实体（若有）。",
-  "hexal.page.types.get_entity/type": "从栈顶获取实体类型（或物品类型）和位置向量，返回该位置符合该类型的实体或物品实体（若有）。",
-  "hexal.page.types.zone_entity/type": "从栈顶获取实体类型（或物品类型）、位置向量及最大距离，返回该位置给定距离范围内所有符合给定类型的实体或物品实体的列表。",
-  "hexal.page.types.zone_entity/not_type": "从栈顶获取实体类型（或物品类型）、位置向量及最大距离，返回该位置给定距离范围内所有不符合给定类型的实体或物品实体的列表。",
+  "hexal.page.types.raycast/entity/type": "移除栈顶实体类型、位置向量和方向向量，返回该位置朝向该方向处符合该类型的实体或物品实体（若有）。",
+  "hexal.page.types.get_entity/type": "从栈顶获取实体类型和位置向量，返回该位置符合该类型的实体或物品实体（若有）。",
+  "hexal.page.types.zone_entity/type": "从栈顶获取实体类型、位置向量及最大距离，返回该位置给定距离范围内所有符合给定类型的实体或物品实体的列表。",
+  "hexal.page.types.zone_entity/not_type": "从栈顶获取实体类型、位置向量及最大距离，返回该位置给定距离范围内所有不符合给定类型的实体或物品实体的列表。",
 
 
   "hexal.entry.everbook": "永恒之书",
@@ -351,15 +352,15 @@
   "text.autoconfig.hexal.option.server.wispSpells.summonProjectileWispCost": "“召唤弹射式咒灵”每速度平方的媒质消耗",
   "text.autoconfig.hexal.option.server.wispSpells.summonProjectileWispMinCost": "“召唤循环式咒灵”媒质消耗下限",
 
-  "text.autoconfig.hexal.option.server.wispUpkeep": "咒灵维护",
-  "text.autoconfig.hexal.option.server.wispUpkeep.tickingWispUpkeepPerTick": "循环式咒灵每刻维护消耗",
-  "text.autoconfig.hexal.option.server.wispUpkeep.projectileWispUpkeepPerTick": "弹射式咒灵每刻维护消耗",
-  "text.autoconfig.hexal.option.server.wispUpkeep.untriggeredWispUpkeepDiscount": "不活跃咒灵维护消耗减免",
-  "text.autoconfig.hexal.option.server.wispUpkeep.untriggeredWispUpkeepDiscount.@Tooltip[0]": "不活跃的循环式咒灵的维护媒质消耗会与此数乘算。",
+  "text.autoconfig.hexal.option.server.wispUpkeep": "咒灵维持",
+  "text.autoconfig.hexal.option.server.wispUpkeep.tickingWispUpkeepPerTick": "循环式咒灵每刻维持消耗",
+  "text.autoconfig.hexal.option.server.wispUpkeep.projectileWispUpkeepPerTick": "弹射式咒灵每刻维持消耗",
+  "text.autoconfig.hexal.option.server.wispUpkeep.untriggeredWispUpkeepDiscount": "不活跃咒灵维持消耗减免",
+  "text.autoconfig.hexal.option.server.wispUpkeep.untriggeredWispUpkeepDiscount.@Tooltip[0]": "不活跃的循环式咒灵的维持媒质消耗会与此数乘算。",
   "text.autoconfig.hexal.option.server.wispUpkeep.untriggeredWispUpkeepDiscount.@Tooltip[1]": "取值范围为0.0到1.0。",
-  "text.autoconfig.hexal.option.server.wispUpkeep.linkUpkeepPerTick": "链接每刻维护消耗",
-  "text.autoconfig.hexal.option.server.wispUpkeep.seonDiscountFactor": "绑定咒灵维护消耗减免因数",
-  "text.autoconfig.hexal.option.server.wispUpkeep.seonDiscountFactor.@Tooltip[0]": "被绑定的咒灵的维护媒质消耗会除以此数。",
+  "text.autoconfig.hexal.option.server.wispUpkeep.linkUpkeepPerTick": "链接每刻维持消耗",
+  "text.autoconfig.hexal.option.server.wispUpkeep.seonDiscountFactor": "绑定咒灵维持消耗减免因数",
+  "text.autoconfig.hexal.option.server.wispUpkeep.seonDiscountFactor.@Tooltip[0]": "被绑定的咒灵的维持媒质消耗会除以此数。",
   "text.autoconfig.hexal.option.server.wispUpkeep.seonDiscountFactor.@Tooltip[1]": "取值范围为2.0到200.0。",
   "text.autoconfig.hexal.option.server.wispUpkeep.storingPlayerCostScaleFactor": "存储玩家iota媒质消耗乘算因数",
   "text.autoconfig.hexal.option.server.wispUpkeep.storingPlayerCostScaleFactor.@Tooltip[0]": "存有代表其他玩家的iota的咒灵的媒质消耗会与此数乘算。",
@@ -384,10 +385,10 @@
   "text.autoconfig.hexal.option.server.itemSpells.tradeItemCost": "“交易”媒质消耗",
   "text.autoconfig.hexal.option.server.itemSpells.maxItemsReturned": "最大返还物品数",
   "text.autoconfig.hexal.option.server.itemSpells.maxItemsReturned.@Tooltip[0]": "“返还物品”单次最多能返还的物品数量。",
-  "text.autoconfig.hexal.option.server.itemSpells.maxItemsReturned.@Tooltip[1]": "取值范围为640到64,000。",
+  "text.autoconfig.hexal.option.server.itemSpells.maxItemsReturned.@Tooltip[1]": "取值范围为640到64000。",
   "text.autoconfig.hexal.option.server.itemSpells.maxRecordsInMediafiedStorage": "物元枢纽最大记录条数",
   "text.autoconfig.hexal.option.server.itemSpells.maxRecordsInMediafiedStorage.@Tooltip[0]": "单个物元枢纽中最多能存储的物元记录条数。",
-  "text.autoconfig.hexal.option.server.itemSpells.maxRecordsInMediafiedStorage.@Tooltip[1]": "取值范围为128到16,384。",
+  "text.autoconfig.hexal.option.server.itemSpells.maxRecordsInMediafiedStorage.@Tooltip[1]": "取值范围为128到16384。",
 
 
   "text.autoconfig.hexal.option.server.greatSpells": "卓越法术",
@@ -406,6 +407,6 @@
   "text.autoconfig.hexal.option.server.greatSpells.tickCostPerTicked.@Tooltip[1]": "会与上方常态媒质消耗加算。",
   "text.autoconfig.hexal.option.server.greatSpells.tickRandomTickIProb": "“加速”随机刻的逆概率",
   "text.autoconfig.hexal.option.server.greatSpells.tickRandomTickIProb.@Tooltip[0]": "“加速”加速方块随机刻的逆概率。",
-  "text.autoconfig.hexal.option.server.greatSpells.tickRandomTickIProb.@Tooltip[1]": "此数越大，越不可能加速随机刻；次数越小，越可能加速随机刻。",
+  "text.autoconfig.hexal.option.server.greatSpells.tickRandomTickIProb.@Tooltip[1]": "此数越大，越不可能加速随机刻；此数越小，越可能加速随机刻。",
   "text.autoconfig.hexal.option.server.greatSpells.tickRandomTickIProb.@Tooltip[2]": "取值范围为600到2100。"
 }
