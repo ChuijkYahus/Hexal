@@ -1,0 +1,216 @@
+name: Build and test
+
+on:
+  push:
+    branches:
+      - '*'
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  # adding a branch name here will make hexdoc deploy prerelease versions of your web book on every push to that branch
+  # for example: https://hexal.hexxy.media/v/latest/main/en_us/
+  HEXDOC_BRANCHES: '["1.19.2"]'
+
+jobs:
+  build-mod:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Build mod
+        run: ./gradlew build
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: mod-build
+          path: build/ciArtifacts/
+          if-no-files-found: error
+
+  test-mod:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Run unit tests
+        run: ./gradlew test
+
+      # if this step fails, you need to run your datagen and commit the updated files
+      - name: Check if datagen needs to be run
+        timeout-minutes: 3
+        run: |
+          mkdir -p /home/runner/.gradle/caches/fabric-loom/assets
+          ./gradlew runAllDatagen
+          git add --intent-to-add .
+          git diff --name-only --exit-code -- ":!:*/src/generated/resources/.cache/*"
+
+  runtime-test-mod:
+    needs: build-mod
+    strategy:
+      fail-fast: false
+      matrix:
+        env:
+          - server
+          - client
+        modloader:
+          - fabric
+          - forge
+        include:
+          - modloader: fabric
+            path: Fabric
+            mc-runtime-test: fabric
+            fabric-api: 0.64.0
+            # NOTE: these must be quoted and formatted exactly like this, since they'll be used as a bash array
+            dependencies: >-
+              'https://cdn.modrinth.com/data/Ha28R6CL/versions/1.7.4%2Bkotlin.1.6.21/fabric-language-kotlin-1.7.4%2Bkotlin.1.6.21.jar'
+              'https://cdn.modrinth.com/data/K01OU20C/versions/tPfCTMiZ/cardinal-components-api-5.0.2.jar'
+              'https://cdn.modrinth.com/data/nU0bVIaL/versions/NorgAU8F/Patchouli-1.19.2-77-FABRIC.jar'
+              'https://cdn.modrinth.com/data/9s6osm5g/versions/EXrxCjl6/cloth-config-8.2.88-fabric.jar'
+              'https://cdn.modrinth.com/data/TZo2wHFe/versions/zrxHAQQ7/paucal-fabric-1.19.2-0.5.0.jar'
+              'https://cdn.modrinth.com/data/nTW3yKrm/versions/IbghSN93/hexcasting-fabric-1.19.2-0.10.3.jar'
+              'https://cdn.modrinth.com/data/8BmcQJ2H/versions/ATPZfRS1/geckolib-fabric-1.19-3.1.40.jar'
+          - modloader: forge
+            path: Forge
+            fabric-api: none
+            mc-runtime-test: lexforge
+            dependencies: >-
+              'https://cdn.modrinth.com/data/ordsPcFz/versions/3.7.1/kotlinforforge-3.7.1-obf.jar'
+              'https://cdn.modrinth.com/data/TZo2wHFe/versions/kClFVbTP/paucal-forge-1.19.2-0.5.0.jar'
+              'https://cdn.modrinth.com/data/nU0bVIaL/versions/62ztr7HA/Patchouli-1.19.2-77.jar'
+              'https://cdn.modrinth.com/data/nTW3yKrm/versions/1a7mtyAU/hexcasting-forge-1.19.2-0.10.3.jar'
+              'https://cdn.modrinth.com/data/8BmcQJ2H/versions/lxzmD9V4/geckolib-forge-1.19-3.1.40.jar'
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Create cache key
+        run: |
+          cat <<END_OF_FILE > dependencies.txt
+          ${{ matrix.dependencies }}
+          END_OF_FILE
+
+      # https://github.com/actions/cache#skipping-steps-based-on-cache-hit
+      - name: Cache dependencies
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: run/mods
+          key: ${{ hashFiles('dependencies.txt') }}
+
+      - name: Download dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          for url in ${{ matrix.dependencies }}; do
+            wget --directory-prefix=run/mods/ "$url"
+          done
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: mod-build
+          path: build/ciArtifacts/
+
+      - name: Prepare mod jars
+        run: cp build/ciArtifacts/*${{ matrix.modloader }}*.jar run/mods
+
+      - name: Run MC test client
+        if: matrix.env == 'client'
+        # sometimes the headlessmc launcher just hangs for no clear reason
+        # you can try re-running the failed jobs if it hits this, or increase the timeout if your mod actually takes that long to load
+        timeout-minutes: 10
+        uses: headlesshq/mc-runtime-test@3.1.1
+        with:
+          java: 17
+          mc: 1.19.2
+          modloader: ${{ matrix.modloader }}
+          regex: '.*${{ matrix.modloader }}.*'
+          fabric-api: ${{ matrix.fabric-api }}
+          mc-runtime-test: ${{ matrix.mc-runtime-test }}
+
+      - name: Run MC test server
+        if: matrix.env == 'server'
+        timeout-minutes: 10  # see above
+        uses: headlesshq/mc-server-test@1.0.0
+        with:
+          java: 17
+          mc: 1.19.2
+          modloader: ${{ matrix.modloader }}
+          fabric-api: ${{ matrix.fabric-api }}
+
+  build-hexdoc:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: read
+    outputs:
+      pages-url: ${{ steps.build.outputs.pages-url }}
+      deploy: ${{ github.event_name != 'pull_request' && contains(fromJson(env.HEXDOC_BRANCHES), github.ref_name) }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: hexdoc-dev/actions/setup@v1
+        with:
+          python-version: 3.11
+
+      - id: build
+        uses: hexdoc-dev/actions/build@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          release: false
+
+  deploy-pages:
+    needs:
+      - build-hexdoc
+    if: needs.build-hexdoc.outputs.deploy == 'true'
+    runs-on: ubuntu-latest
+    concurrency:
+      group: hexdoc-deploy-pages
+      cancel-in-progress: false
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: hexdoc-dev/actions/setup@v1
+        with:
+          python-version: 3.11
+
+      - name: Merge new hexdoc build into existing book
+        uses: hexdoc-dev/actions/merge@v1
+        with:
+          release: false
+          site-url: ${{ needs.build-hexdoc.outputs.pages-url }}
+
+      # if you want to add extra things to your website (eg. Javadoc/Dokka), add it to _site/dst/docs here
+      # NOTE: also update release.yml!
+
+      - name: Deploy to Pages
+        uses: hexdoc-dev/actions/deploy-pages@v1
+        with:
+          merge: false
+          release: false

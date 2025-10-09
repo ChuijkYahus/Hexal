@@ -54,9 +54,10 @@
     "fabric-language-kotlin": ">=1.7.4+kotlin.1.6.21",
     "cardinal-components": ">=5.0.2",
     "patchouli": ">=1.19.2-77",
+    "cloth-config": "8.2.x",
     "paucal": "0.5.x",
     "hexcasting": "=0.10.3",
-    "geckolib3": "=3.1.40"
+    "geckolib3": ">=3.1.40"
   },
   "suggests": {
     "gravitychanger": "0.7.21+fabric",

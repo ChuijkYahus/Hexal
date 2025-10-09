@@ -1,8 +1,6 @@
 plugins {
     id 'fabric-loom' version "$loomVersion"
-    id "com.modrinth.minotaur" version "2.+"
-    // It's safest to have this on 2.+ to get the latest features and
-    // bug fixes without having to worry about breaking changes.
+    id 'hexal.platform'
 }
 
 archivesBaseName = getArtifactID("fabric")
@@ -16,20 +14,22 @@ loom {
         client {
             client()
             setConfigName("Fabric Client")
+            runDir "Fabric/run"
         }
         server {
             server()
             setConfigName("Fabric Server")
+            runDir "Fabric/runServer"
         }
         datagen {
             client()
+            runDir "Fabric/run"
             vmArg "-Dfabric-api.datagen"
             vmArg "-Dfabric-api.datagen.modid=${modID}"
             vmArg "-Dfabric-api.datagen.output-dir=${file("src/generated/resources")}"
         }
 
         configureEach {
-            runDir "Fabric/run"
             ideConfigGenerated(true)
         }
     }
@@ -39,7 +39,7 @@ repositories {
     mavenCentral()
     maven { url "https://maven.shedaniel.me/" }
     maven {
-        url 'https://ladysnake.jfrog.io/artifactory/mods'
+        url 'https://maven.ladysnake.org/releases'
     }
     maven {
         name "entity reach"
@@ -111,6 +111,8 @@ dependencies {
     modApi include("com.unascribed:lib39-core:$lib39Version+$minecraftVersion")
     modApi include("com.unascribed:lib39-phantom:$lib39Version+$minecraftVersion")
 
+    modImplementation("com.terraformersmc:modmenu:$modmenuVersion")
+
     implementation 'org.jetbrains:annotations:23.0.0'
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
@@ -141,36 +143,31 @@ processResources {
     }
 }
 
-def loadProperties = { filename ->
-    def properties = new Properties()
-    rootProject.file(filename).withInputStream {
-        properties.load(it)
-    }
-    return properties
+tasks.register("ciArtifacts", Copy) {
+    from remapJar
+    into rootProject.file("build/ciArtifacts")
 }
 
-modrinth {
-    token = loadProperties("keys.properties").MODRINTH_TOKEN
-    projectId = "$modID" // This can be the project ID or the slug. Either will work!
-    versionNumber = "$modVersion" // You don't need to set this manually. Will fail if Modrinth has this version already
-    versionName = "$modVersion-fabric"
-    changelog = rootProject.file("changelog.md").text
+build {
+    dependsOn ciArtifacts
+}
 
-    versionType = "release" // This is the default -- can also be `beta` or `alpha`
-    uploadFile = remapJar // With Loom, this MUST be set to `remapJar` instead of `jar`!
-    gameVersions = ["1.19.2"] // Must be an array, even with only one version
-    loaders = ["fabric"] // Must also be an array - no need to specify this if you're using Loom or ForgeGradle
-    dependencies { // A special DSL for creating dependencies
-        // scope.type
-        // The scope can be `required`, `optional`, `incompatible`, or `embedded`
-        // The type can either be `project` or `version`
-        required.project "hex-casting" // Creates a new required dependency on Hex Casting
-        required.project "paucal"
-        required.project "patchouli"
-        required.project "fabric-language-kotlin"
-        required.project "cardinal-components-api"
-        required.project "geckolib"
-    }
+hexalModDependencies {
+    requires("fabric-api")
+    requires("fabric-language-kotlin")
+    requires("cardinal-components-api")
+    requires("patchouli")
+    requires("cloth-config")
+    requires("paucal")
+    requires(curseforge: "hexcasting", modrinth: "hex-casting")
+    requires("geckolib")
+
+    optional("modmenu")
+    optional("pehkui")
+}
+
+publishMods {
+    file = remapJar.archiveFile
 }
 
 setupJar(this)

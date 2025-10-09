@@ -8,15 +8,13 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '6.0.+', changing: true
         classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
     }
 }
 
 plugins {
-    id "com.modrinth.minotaur" version "2.+"
-    // It's safest to have this on 2.+ to get the latest features and
-    // bug fixes without having to worry about breaking changes.
+    id 'hexal.platform'
 }
 
 apply plugin: 'net.minecraftforge.gradle'
@@ -234,6 +232,10 @@ task printSourceSetInformation(){
     }
 }
 
+tasks.register("ciArtifacts", Copy) {
+    from jar
+    into rootProject.file("build/ciArtifacts")
+}
 
 // https://discord.com/channels/313125603924639766/733055378371117127/980968358658838540
 // > It won't generate a refmap if there are no changes source files
@@ -249,6 +251,7 @@ build {
     compileKotlin {
         outputs.upToDateWhen { false }
     }
+    dependsOn ciArtifacts
 }
 
 sourceSets {
@@ -276,35 +279,33 @@ processTestResources {
     }
 }
 
-def loadProperties = { filename ->
-    def properties = new Properties()
-    rootProject.file(filename).withInputStream {
-        properties.load(it)
-    }
-    return properties
+hexalModDependencies {
+    requires("kotlin-for-forge")
+    requires("paucal")
+    requires("patchouli")
+    requires(curseforge: "hexcasting", modrinth: "hex-casting")
+    requires("moreiotas")
+    requires("geckolib")
 }
 
-modrinth {
-    token = loadProperties("keys.properties").MODRINTH_TOKEN
-    projectId = "hexal" // This can be the project ID or the slug. Either will work!
-    versionNumber = "$modVersion" // You don't need to set this manually. Will fail if Modrinth has this version already
-    versionName = "$modVersion-forge"
-    changelog = rootProject.file("changelog.md").text
-    versionType = "release" // This is the default -- can also be `beta` or `alpha`
-    uploadFile = jar // With Loom, this MUST be set to `remapJar` instead of `jar`!
-    gameVersions = ["1.19.2"] // Must be an array, even with only one version
-    loaders = ["forge"] // Must also be an array - no need to specify this if you're using Loom or ForgeGradle
-    dependencies { // A special DSL for creating dependencies
-        // scope.type
-        // The scope can be `required`, `optional`, `incompatible`, or `embedded`
-        // The type can either be `project` or `version`
-        required.project "hex-casting" // Creates a new required dependency on Hex Casting
-        required.project "paucal"
-        required.project "patchouli"
-        required.project "kotlin-for-forge"
-        required.project "geckolib"
-    }
+publishMods {
+    file = jar.archiveFile
 }
 
 jar.finalizedBy('reobfJar')
 setupJar(this)
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            // ForgeGradle exports (broken) remapped dependencies, so just remove all of them
+            // https://github.com/VazkiiMods/Botania/blob/87ef25381381f06a1f0f106b896b420956d52bca/Forge/build.gradle#L179
+            pom.withXml {
+                def node = asNode()
+                if (node.dependencies.size() > 0) {
+                    node.remove(node.dependencies)
+                }
+            }
+        }
+    }
+}
