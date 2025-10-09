@@ -27,6 +27,7 @@ keys.properties
 # other
 eclipse
 run
+runServer
 /Common/logs/latest.log
 
 # Files from Forge MDK
