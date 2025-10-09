@@ -77,7 +77,7 @@ jobs:
           - modloader: fabric
             path: Fabric
             mc-runtime-test: fabric
-            fabric-api: 0.64.0
+            fabric-api: 0.76.0
             # NOTE: these must be quoted and formatted exactly like this, since they'll be used as a bash array
             dependencies: >-
               'https://cdn.modrinth.com/data/Ha28R6CL/versions/1.7.4%2Bkotlin.1.6.21/fabric-language-kotlin-1.7.4%2Bkotlin.1.6.21.jar'

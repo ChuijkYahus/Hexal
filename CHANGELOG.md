@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Changed
 
 - Updated zh_cn translations, by ChuijkYahus in [#169](https://github.com/FallingColors/Hexal/pull/169).
+- Increased minimum Fabric API version to 0.76.0.
 
 ### Fixed
 
