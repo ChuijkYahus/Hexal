@@ -46,7 +46,9 @@
   "hexcasting.mishap.invalid_value.gate.offset": "an offset of at most %f blocks",
 
   "hexcasting.iota.hexal:gate": "Gate",
+  "hexcasting.iota.hexal:gate.desc": "a gate",
   "hexcasting.iota.hexal:item": "Item",
+  "hexcasting.iota.hexal:item.desc": "a mote",
 
   "hexal.spelldata.entity_type": "Type",
   "hexal.spelldata.gate": "Gate %d",
