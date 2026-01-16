@@ -45,10 +45,6 @@
   "hexcasting.mishap.invalid_value.mote_not_size_one": "一个不包含NBT数据或大小为1的物元",
   "hexcasting.mishap.invalid_value.gate.offset": "不超过%f格的偏移量",
 
-
-  "hexcasting.iota.hexal:iota_type": "Iota类型",
-  "hexcasting.iota.hexal:entity_type": "实体类型",
-  "hexcasting.iota.hexal:item_type": "物品类型",
   "hexcasting.iota.hexal:gate": "门径",
   "hexcasting.iota.hexal:item": "物品",
 

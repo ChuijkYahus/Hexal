@@ -45,10 +45,6 @@
   "hexcasting.mishap.invalid_value.mote_not_size_one": "a mote with no NBT data or of size one",
   "hexcasting.mishap.invalid_value.gate.offset": "an offset of at most %f blocks",
 
-
-  "hexcasting.iota.hexal:iota_type": "Iota Type",
-  "hexcasting.iota.hexal:entity_type": "Entity Type",
-  "hexcasting.iota.hexal:item_type": "Item Type",
   "hexcasting.iota.hexal:gate": "Gate",
   "hexcasting.iota.hexal:item": "Item",
 
