@@ -25,7 +25,7 @@
   "hexcasting.mishap.invalid_value.class.consumable_entity": "一个可被拆解的实体",
   "hexcasting.mishap.invalid_value.class.wisp.casting": "一个施法咒灵",
   "hexcasting.mishap.invalid_value.class.list.double": "一个由数组成的列表",
-  "hexcasting.mishap.invalid_value.class.list.vec": "一个向量组成的列表",
+  "hexcasting.mishap.invalid_value.class.list.vec": "一个由向量组成的列表",
   "hexcasting.mishap.invalid_value.class.gate": "一个门径",
   "hexcasting.mishap.invalid_value.class.mote": "一个物元",
   "hexcasting.mishap.invalid_value.class.moteentity.itemitemframe": "一个物元、物品实体或物品展示框",
@@ -44,7 +44,7 @@
 
   "hexcasting.iota.hexal:gate": "门径",
   "hexcasting.iota.hexal:gate.desc": "一个门径",
-  "hexcasting.iota.hexal:item": "物品",
+  "hexcasting.iota.hexal:item": "物元",
   "hexcasting.iota.hexal:item.desc": "一个物元",
 
   "hexal.spelldata.entity_type": "类型",
