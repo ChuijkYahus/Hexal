@@ -298,7 +298,7 @@
 
   "hexal.entry.great_wisps": "卓越咒灵法术",
   "hexal.page.great_wisps.wisp/consume.0": "移除栈顶咒灵实体，并拆解该咒灵。咒灵携带的图案不可追回，但是如果此法术是由其他咒灵施放的，那么被拆解咒灵所剩的媒质还可再加利用。",
-  "hexal.page.great_wisps.wisp/consume.1": "若咒灵的所有者是我，或其被$(l:patterns/spells/wisps#hexal:wisp/transfer/allow)允许/$与施法者或其所有者转送，消耗 1 个$(l:items/amethyst)$(item)紫水晶碎片/$；若咒灵的所有者是他人且未被允许转送，则消耗该咒灵所拥有的媒质量的一半。媒质的再利用效率不算特别高，会在传输过程中损耗掉被拆解咒灵媒质库容量的 1/20。",
+  "hexal.page.great_wisps.wisp/consume.1": "若咒灵的所有者是我，或其被$(l:patterns/spells/wisps#hexal:wisp/transfer/allow)允许/$与施法者或其所有者转送，消耗 1 个$(l:items/amethyst)$(item)紫水晶碎片/$；若咒灵的所有者是他人且未被允许转送，则消耗该咒灵所拥有的媒质量的一半。媒质的再利用效率不算特别高，会在传输过程中损耗掉被拆解咒灵媒质库容量的 1/20。$(br2)此外，咒灵还可拆解自身，此时不消耗媒质。",
   "hexal.page.great_wisps.wisp/seon/set": "在我的咒灵和我之间建立更紧密的联系。我只能同时绑定一个咒灵，但绑定咒灵的常态消耗将大大减少。",
   "hexal.page.great_wisps.wisp/seon/get": "返回我当前绑定的咒灵。（这并不是卓越法术，记载于此是为了方便查找。）",
 
