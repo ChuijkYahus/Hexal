@@ -33,21 +33,18 @@ object OpCloseGate : VarargSpellAction {
 
     override fun execute(args: List<Iota>, argc: Int, env: CastingEnvironment): SpellAction.Result {
         val gate = args.getGate(0, argc)
-
         val targetPos = (
             if (gate.isDrifting) {
                 args.getVec3(1, argc)
-            }
-            else if(gate.isLocationAnchored){
+            } else if (gate.isLocationAnchored) {
                 gate.getTargetPos(env.world)
-                    ?: throw IllegalStateException("Location Anchored gates should always have a target position.")
-            }
-            else { //gate.isEntityAnchored
+                    ?: throw IllegalStateException("Location-anchored gates should always have a target position.")
+            } else { //gate.isEntityAnchored
                 gate.getTargetPos(env.world)
                     ?: when (val entityAnchor = gate.getTarget()?.right()?.getOrNull()) {
-                    null -> throw IllegalStateException("Entity Anchored gate's target is computed as a Drifting gate.")
-                    else -> throw MishapNoEntity(gate)
-                }
+                        null -> throw IllegalStateException("Entity-anchored gates should always have an EntityAnchor.")
+                        else -> throw MishapNoEntity(gate)
+                    }
             }
         )
 
@@ -152,14 +149,10 @@ object OpCloseGate : VarargSpellAction {
     fun aboveStackRoot(toCheck: Entity, allTeleportees: Set<Entity>): Boolean {
         val lowerVehicle = toCheck.vehicle?.vehicle
         val vehicleGated = allTeleportees.contains(toCheck.vehicle)
-
-        return (
-            if (lowerVehicle == null) {
-                vehicleGated
-            }
-            else {
-                vehicleGated || (allTeleportees.contains(lowerVehicle) && lowerVehicle.type.`is`(HexTags.Entities.STICKY_TELEPORTERS))
-            }
-        )
+        if (lowerVehicle == null) {
+            return vehicleGated
+        } else {
+            return vehicleGated || (allTeleportees.contains(lowerVehicle) && lowerVehicle.type.`is`(HexTags.Entities.STICKY_TELEPORTERS))
+        }
     }
 }
