@@ -16,6 +16,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   - Fabric Loader: `0.16`
   - Fabric Language Kotlin: `1.10.18+kotlin.1.9.22`
 
+### Fixed
+
+- Fixed internal error when an entity-anchored gate can't find its entity, by Dominik-Pawelec in [#204](https://github.com/FallingColors/Hexal/pull/204)
+
 ## `0.3.1` - 2025-10-30
 
 ### Changed
