@@ -210,6 +210,8 @@ object HexalActions {
 //	val GATE_MARK_NUM_GET = make("gate/mark/num/get", HexPattern.fromAngles("qawwaqqqaq", HexDir.WEST), OpGetNumMarkedGate)
 	@JvmField
 	val GATE_CLOSE = make("gate/close", HexPattern.fromAngles("qqqwwqqqwqqawdedw", HexDir.WEST), OpCloseGate)
+	@JvmField
+	val GATE_CLOSEABLE = make("gate/closeable", HexPattern.fromAngles("qqqwwqqqwqaqdde", HexDir.WEST), OpCloseable)
 
 	// =============================== Gate Stuff =====================================
 	@JvmField

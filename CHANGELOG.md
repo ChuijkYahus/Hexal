@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 
 - Added support for debugging cyclic wisps with [HexDebug](https://modrinth.com/mod/hexdebug)!
+- Added Gatekeeper's Purification to check whether a gate currently has a valid destination
 
 ### Changed
 

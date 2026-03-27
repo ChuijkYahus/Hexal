@@ -66,6 +66,14 @@
       "input": "gate | gate, vec",
       "output": "",
       "text": "hexal.page.gates.gate/close"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexal:gate/closeable",
+      "anchor": "hexal:gate/closeable",
+      "input": "gate",
+      "output": "bool",
+      "text": "hexal.page.gates.gate/closeable"
     }
   ]
 }
