@@ -9,7 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 
 - Added support for debugging cyclic wisps with [HexDebug](https://modrinth.com/mod/hexdebug)!
-- Added Gatekeeper's Purification to check whether a gate currently has a valid destination
+- Added Gatekeeper's Purification to check whether a gate currently has a valid destination.
 
 ### Changed
 
@@ -19,7 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 
-- Fixed internal error when an entity-anchored gate can't find its entity, by Dominik-Pawelec in [#204](https://github.com/FallingColors/Hexal/pull/204)
+- Fixed internal error when an entity-anchored gate can't find its entity, by Dominik-Pawelec in [#204](https://github.com/FallingColors/Hexal/pull/204).
 
 ## `0.3.1` - 2025-10-30
 
