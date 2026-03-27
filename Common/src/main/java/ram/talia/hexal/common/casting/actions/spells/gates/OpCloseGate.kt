@@ -9,7 +9,6 @@ import at.petrak.hexcasting.api.casting.eval.env.PlayerBasedCastEnv
 import at.petrak.hexcasting.api.casting.getVec3
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadLocation
-import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.item.enchantment.EnchantmentHelper
@@ -19,6 +18,8 @@ import ram.talia.hexal.api.getGate
 import ram.talia.hexal.api.minus
 import ram.talia.hexal.api.casting.castables.VarargSpellAction
 import ram.talia.hexal.api.casting.iota.GateIota
+import ram.talia.hexal.api.casting.mishaps.MishapAnchorEntityMissing
+import kotlin.jvm.optionals.getOrNull
 
 object OpCloseGate : VarargSpellAction {
     override fun argc(stack: List<Iota>): Int {
@@ -32,10 +33,21 @@ object OpCloseGate : VarargSpellAction {
 
     override fun execute(args: List<Iota>, argc: Int, env: CastingEnvironment): SpellAction.Result {
         val gate = args.getGate(0, argc)
-        val targetPos = if (gate.isDrifting) args.getVec3(1, argc) else gate.getTargetPos(env.world)
-            ?: throw IllegalStateException("non-drifting gates should always have a target pos.")
-        
-        
+        val targetPos = (
+            if (gate.isDrifting) {
+                args.getVec3(1, argc)
+            } else if (gate.isLocationAnchored) {
+                gate.getTargetPos(env.world)
+                    ?: throw IllegalStateException("Location-anchored gates should always have a target position.")
+            } else { //gate.isEntityAnchored
+                gate.getTargetPos(env.world)
+                    ?: when (val entityAnchor = gate.getTarget()?.right()?.getOrNull()) {
+                        null -> throw IllegalStateException("Entity-anchored gates should always have an EntityAnchor.")
+                        else -> throw MishapAnchorEntityMissing(gate)
+                    }
+            }
+        )
+
         // only check if in ambit when the gate is drifting.
         if (gate.isDrifting)
             env.assertVecInRange(targetPos)
@@ -58,9 +70,9 @@ object OpCloseGate : VarargSpellAction {
         burst.add(ParticleSpray.burst(targetPos.add(0.0, meanEyeHeight / 2.0, 0.0), 2.0))
 
         return SpellAction.Result(
-                Spell(gatees, targetPos, gate.isDrifting),
-                cost,
-                burst
+            Spell(gatees, targetPos, gate.isDrifting),
+            cost,
+            burst
         )
     }
 
