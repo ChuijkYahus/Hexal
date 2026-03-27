@@ -9,7 +9,7 @@ import net.minecraft.world.item.DyeColor
 import ram.talia.hexal.api.casting.iota.GateIota
 
 
-class MishapNoEntity(val gate: GateIota) : Mishap() {
+class MishapAnchorEntityMissing(val gate: GateIota) : Mishap() {
     override fun accentColor(env: CastingEnvironment, errorCtx: Context): FrozenPigment = dyeColor(DyeColor.YELLOW)
 
     override fun errorMessage(env: CastingEnvironment, errorCtx: Context): Component = error("entity_gate_with_no_entity", gate.display())

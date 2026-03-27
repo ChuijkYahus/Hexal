@@ -18,7 +18,7 @@ import ram.talia.hexal.api.getGate
 import ram.talia.hexal.api.minus
 import ram.talia.hexal.api.casting.castables.VarargSpellAction
 import ram.talia.hexal.api.casting.iota.GateIota
-import ram.talia.hexal.api.casting.mishaps.MishapNoEntity
+import ram.talia.hexal.api.casting.mishaps.MishapAnchorEntityMissing
 import kotlin.jvm.optionals.getOrNull
 
 object OpCloseGate : VarargSpellAction {
@@ -43,7 +43,7 @@ object OpCloseGate : VarargSpellAction {
                 gate.getTargetPos(env.world)
                     ?: when (val entityAnchor = gate.getTarget()?.right()?.getOrNull()) {
                         null -> throw IllegalStateException("Entity-anchored gates should always have an EntityAnchor.")
-                        else -> throw MishapNoEntity(gate)
+                        else -> throw MishapAnchorEntityMissing(gate)
                     }
             }
         )
