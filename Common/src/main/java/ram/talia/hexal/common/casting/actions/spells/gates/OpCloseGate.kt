@@ -52,6 +52,7 @@ object OpCloseGate : VarargSpellAction {
         if (gate.isDrifting)
             env.assertVecInRange(targetPos)
 
+        // subtract 0,1,0 when checking out-of-world to prevent teleporting into bedrock floor and falling through
         if (!env.isVecInWorld(targetPos.subtract(0.0, 1.0, 0.0)))
             throw MishapBadLocation(targetPos, "too_close_to_out")
 
