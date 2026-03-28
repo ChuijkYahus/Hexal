@@ -9,6 +9,7 @@ import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
 import net.fabricmc.fabric.api.networking.v1.PacketSender
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags
@@ -69,6 +70,10 @@ object FabricHexalInitializer : ModInitializer {
             savedData.setDirty()
         }
         ServerPlayConnectionEvents.JOIN.register(this::onPlayerJoin)
+        ItemGroupEvents.MODIFY_ENTRIES_ALL.register { tab, entries ->
+            HexalBlocks.registerBlockCreativeTab(entries::accept, tab)
+            HexalItems.registerItemCreativeTab(entries, tab)
+        }
     }
 
     private fun onPlayerJoin(impl : ServerGamePacketListenerImpl, sender : PacketSender, server : MinecraftServer){
