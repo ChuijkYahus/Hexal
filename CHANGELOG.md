@@ -16,6 +16,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Increased minimum dependency versions:
   - Fabric Loader: `0.16`
   - Fabric Language Kotlin: `1.10.18+kotlin.1.9.22`
+- When using the Trade spell with a trade offer that accepts two items, they can now be provided in any order
+- You can now create a Mote Nexus using any color of shulker box
+- The media cost for Use Item On has been documented
+- Mote Nexus and Relay have been added to the Hex Casting creative mode tab
+- Increased the cost of Phase Block to prevent short durations being castable for free
 
 ### Fixed
 
