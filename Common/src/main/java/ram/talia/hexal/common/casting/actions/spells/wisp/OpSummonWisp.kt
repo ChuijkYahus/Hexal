@@ -38,9 +38,7 @@ class OpSummonWisp(val ticking: Boolean) : SpellAction {
         val media: Double
         val cost: Long
 
-        if (env.castingEntity !is ServerPlayer) {
-            throw MishapNeedsCaster()
-        }
+        val player = env.castingEntity as? ServerPlayer ?: throw MishapNeedsCaster()
 
         if (env is WispCastEnv && env.wisp.summonedChildThisCast)
             throw MishapExcessiveReproduction(env.wisp) // wisps can only summon one child per cast.
@@ -55,14 +53,14 @@ class OpSummonWisp(val ticking: Boolean) : SpellAction {
             true -> {
                 media = args.getPositiveDouble(2, argc)
                 cost = HexalConfig.server.summonTickingWispCost.addBounded((media * MediaConstants.DUST_UNIT).toLong())
-                Spell(true, pos, hex.toList(), ravenmind, (media * MediaConstants.DUST_UNIT).toLong())
+                Spell(player, true, pos, hex.toList(), ravenmind, (media * MediaConstants.DUST_UNIT).toLong())
             }
             false -> {
                 val vel = args.getVec3(2, argc)
                 media = args.getPositiveDouble(3, argc)
                 cost = max((HexalConfig.server.summonProjectileWispCost * vel.lengthSqr()).toLong(), HexalConfig.server.summonProjectileWispMinCost)
                             .addBounded((media * MediaConstants.DUST_UNIT).toLong())
-                Spell(false, pos, hex.toList(), ravenmind, (media * MediaConstants.DUST_UNIT).toLong(), vel)
+                Spell(player, false, pos, hex.toList(), ravenmind, (media * MediaConstants.DUST_UNIT).toLong(), vel)
             }
         }
 
@@ -75,13 +73,11 @@ class OpSummonWisp(val ticking: Boolean) : SpellAction {
         )
     }
 
-    private data class Spell(val ticking: Boolean, val pos: Vec3, val hex: List<Iota>, val ravenmind: Iota?, val media: Long, val vel: Vec3 = Vec3.ZERO) : RenderedSpell {
+    private data class Spell(val player: ServerPlayer, val ticking: Boolean, val pos: Vec3, val hex: List<Iota>, val ravenmind: Iota?, val media: Long, val vel: Vec3 = Vec3.ZERO) : RenderedSpell {
         override fun cast(env: CastingEnvironment) {
             // wisps can only summon one child per cast
             if (env is WispCastEnv)
                 env.wisp.summonedChildThisCast = true
-
-            val player = env.castingEntity as ServerPlayer
 
             val pigment = env.pigment
             val wisp = when (ticking) {

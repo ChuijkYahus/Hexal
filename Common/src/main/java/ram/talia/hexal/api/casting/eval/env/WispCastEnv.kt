@@ -67,21 +67,21 @@ class WispCastEnv(val wisp: BaseCastingWisp, level: ServerLevel) : CastingEnviro
     override fun getCastingHand(): InteractionHand = InteractionHand.MAIN_HAND
 
     override fun getUsableStacks(mode: StackDiscoveryMode): MutableList<ItemStack> {
-        if (wisp.caster != null)
-            return getUsableStacksForPlayer(mode, null, wisp.caster as ServerPlayer);
-        return mutableListOf()
+        return (wisp.caster as? ServerPlayer)
+            ?.let { getUsableStacksForPlayer(mode, null, it) }
+            ?: mutableListOf()
     }
 
     override fun getPrimaryStacks(): MutableList<HeldItemInfo> {
-        if (wisp.caster != null)
-            return getPrimaryStacksForPlayer(InteractionHand.OFF_HAND, wisp.caster as ServerPlayer);
-        return mutableListOf()
+        return (wisp.caster as? ServerPlayer)
+            ?.let { getPrimaryStacksForPlayer(InteractionHand.OFF_HAND, it) }
+            ?: mutableListOf()
     }
 
     override fun replaceItem(stackOk: Predicate<ItemStack>, replaceWith: ItemStack, hand: InteractionHand?): Boolean {
-        if (wisp.caster != null)
-            return replaceItemForPlayer(stackOk, replaceWith, hand, wisp.caster as ServerPlayer)
-        return false
+        return (wisp.caster as? ServerPlayer)
+            ?.let { replaceItemForPlayer(stackOk, replaceWith, hand, it) }
+            ?: false
     }
 
     override fun getPigment(): FrozenPigment = wisp.pigment()

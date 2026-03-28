@@ -14,7 +14,7 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper
 class MishapNoWisp : Mishap() {
 	override fun accentColor(env: CastingEnvironment, errorCtx: Context): FrozenPigment = dyeColor(DyeColor.LIGHT_BLUE)
 
-	override fun errorMessage(env: CastingEnvironment, errorCtx: Context): Component = error("no_wisp", actionName(errorCtx.name))
+	override fun errorMessage(env: CastingEnvironment, errorCtx: Context): Component = error("no_wisp")
 
 	private inline fun dropAll(player: Player, stacks: MutableList<ItemStack>, filter: (ItemStack) -> Boolean = { true }) {
 		for (index in stacks.indices) {
