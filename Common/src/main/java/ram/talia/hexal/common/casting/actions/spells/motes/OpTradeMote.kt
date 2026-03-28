@@ -80,7 +80,7 @@ object OpTradeMote : VarargConstMediaAction {
             val offers = villager.offers
             // have to try this both ways around apparently.
             val merchantoffer = if (tradeIndex != null)
-                    offers.getRecipeFor(toTrade0, toTrade1, tradeIndex) ?: offers.getRecipeFor(toTrade0, toTrade1, tradeIndex) ?: break
+                    offers.getRecipeFor(toTrade0, toTrade1, tradeIndex) ?: offers.getRecipeFor(toTrade1, toTrade0, tradeIndex) ?: break
                 else getFirstMatchingInStockOffer(offers, toTrade0, toTrade1) ?: break
             if (merchantoffer.isOutOfStock)
                 break
@@ -99,7 +99,7 @@ object OpTradeMote : VarargConstMediaAction {
                 }
 
                 toTradeItemIotas.getOrNull(0)?.removeItems(toTradeItemIotas[0].item.maxStackSize - toTrade0.count)
-                toTradeItemIotas.getOrNull(1)?.removeItems(toTradeItemIotas[1].item.maxStackSize - toTrade0.count)
+                toTradeItemIotas.getOrNull(1)?.removeItems(toTradeItemIotas[1].item.maxStackSize - toTrade1.count)
             }
 
         } while (!merchantoffer.isOutOfStock)
