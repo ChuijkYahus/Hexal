@@ -144,7 +144,7 @@ abstract class BaseCastingWisp(entityType: EntityType<out BaseCastingWisp>, worl
 		}
 
 		// check if media is <= 0 ; destroy the wisp if it is, decrement the lifespan otherwise.
-		if (media <= 0) {
+		if (media <= 0 || casterUUID == null) {
 			discard()
 		}
 
