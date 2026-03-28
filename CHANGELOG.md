@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Added support for debugging cyclic wisps with [HexDebug](https://modrinth.com/mod/hexdebug)!
 - Added Gatekeeper's Purification to check whether a gate currently has a valid destination.
+- Added a mishap for trying to summon a wisp in an environment without a casting player.
 
 ### Changed
 
@@ -30,6 +31,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Fixed the Trade spell requiring input items in a specific order for two-item trades.
 - Fixed broken/missing lang keys for `list.double` and `list.vec`.
 - Fixed wisps being able to generate infinite media by consuming themselves.
+- Fixed wisps being unable to access the offhand or inventory of their caster.
+- Fixed wisps without a caster being frozen forever.
 
 ## `0.3.1` - 2025-10-30
 
