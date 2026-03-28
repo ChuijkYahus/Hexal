@@ -97,10 +97,10 @@ object HexalConfig {
             const val DEFAULT_SMELT_COST = 0.75
 
             // default costs of fabric only spells
-            const val DEFAULT_PHASE_BLOCK_COST_FACTOR = 0.0001
+            const val DEFAULT_PHASE_BLOCK_COST_FACTOR = 0.01
 
-            const val MIN_PHASE_BLOCK_COST_FACTOR = 0.00001
-            const val MAX_PHASE_BLOCK_COST_FACTOR = 0.001
+            const val MIN_PHASE_BLOCK_COST_FACTOR = 0.001
+            const val MAX_PHASE_BLOCK_COST_FACTOR = 0.1
 
             // default costs of wisp spells
             const val DEFAULT_MOVE_SPEED_SET_COST =1.0

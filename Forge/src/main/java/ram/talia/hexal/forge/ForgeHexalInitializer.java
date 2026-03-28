@@ -9,6 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.dedicated.DedicatedServer;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -87,6 +88,11 @@ public class ForgeHexalInitializer {
 				 //noinspection Convert2MethodRef
 				 ForgePacketHandler.init();
 			 }));
+
+		modBus.addListener((BuildCreativeModeTabContentsEvent evt) -> {
+			HexalBlocks.registerBlockCreativeTab(evt::accept, evt.getTab());
+			HexalItems.registerItemCreativeTab(evt, evt.getTab());
+		});
 
 		evBus.addListener((ServerStartedEvent event)->{
 			//rule them out like this so that it doesn't try to access client-only stuff on a dedicated server

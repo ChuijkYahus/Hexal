@@ -13,14 +13,8 @@ public interface HexalAPI
 	Logger LOGGER = LogManager.getLogger(MOD_ID);
 	
 	Supplier<HexalAPI> INSTANCE = Suppliers.memoize(() -> {
-		try {
-			return (HexalAPI) Class.forName("ram.talia.hexal.common.impl.HexalAPIImpl")
-								 .getDeclaredConstructor().newInstance();
-		} catch (ReflectiveOperationException e) {
-			LogManager.getLogger().warn("Unable to find HexalAPIImpl, using a dummy");
-			return new HexalAPI() {
-			};
-		}
+		// no HexalAPIImpl since this api barely does anything
+		return new HexalAPI() {};
 	});
 	
 	static HexalAPI instance() {

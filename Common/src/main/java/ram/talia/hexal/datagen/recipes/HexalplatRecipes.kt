@@ -18,6 +18,8 @@ import net.minecraft.data.recipes.ShapedRecipeBuilder
 import net.minecraft.world.entity.npc.VillagerProfession
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.block.Blocks
+import net.minecraft.tags.TagKey
+import net.minecraft.tags.BlockTags
 import ram.talia.hexal.api.HexalAPI
 import ram.talia.hexal.common.lib.HexalBlocks
 import ram.talia.hexal.common.lib.HexalItems
@@ -55,7 +57,7 @@ class HexalplatRecipes(output: PackOutput) : PaucalRecipeProvider(output, HexalA
 			MinMaxBounds.Doubles.between(0.1, 2.05)
 		)
 
-		BrainsweepRecipeBuilder(StateIngredientHelper.of(Blocks.SHULKER_BOX),
+		BrainsweepRecipeBuilder(StateIngredientHelper.of(BlockTags.SHULKER_BOXES),
 			VillagerIngredient(VillagerProfession.CARTOGRAPHER, null, 2),
 			HexalBlocks.MEDIAFIED_STORAGE.defaultBlockState(),
 			MediaConstants.CRYSTAL_UNIT * 10)
