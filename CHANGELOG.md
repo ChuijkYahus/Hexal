@@ -16,10 +16,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Increased minimum dependency versions:
   - Fabric Loader: `0.16`
   - Fabric Language Kotlin: `1.10.18+kotlin.1.9.22`
+- You can now create a Mote Nexus using any color of shulker box.
+- The media cost for Use Item On has been documented.
+- Mote Nexus and Relay have been added to the Hex Casting creative mode tab.
+- Increased the cost of Phase Block to prevent short durations being castable for free.
+- Updated zh_cn translations, by ChuijkYahus in [#187](https://github.com/FallingColors/Hexal/pull/187), [#199](https://github.com/FallingColors/Hexal/pull/199), and [#206](https://github.com/FallingColors/Hexal/pull/206).
+- Wisps can now consume themselves for free to cleanly self-destruct.
+- Moved certain lang keys for type iotas from Hexal into MoreIotas, since MoreIotas is what actually implements type iotas.
 
 ### Fixed
 
 - Fixed internal error when an entity-anchored gate can't find its entity, by Dominik-Pawelec in [#204](https://github.com/FallingColors/Hexal/pull/204).
+- Fixed the Trade spell requiring input items in a specific order for two-item trades.
+- Fixed broken/missing lang keys for `list.double` and `list.vec`.
+- Fixed wisps being able to generate infinite media by consuming themselves.
 
 ## `0.3.1` - 2025-10-30
 

@@ -1,9 +1,11 @@
 package ram.talia.hexal.common.lib
 
+import at.petrak.hexcasting.common.lib.HexCreativeTabs
 import at.petrak.hexcasting.common.lib.HexItems
 import com.mojang.datafixers.util.Pair
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.BlockItem
+import net.minecraft.world.item.CreativeModeTab
 import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.SoundType
@@ -14,7 +16,10 @@ import ram.talia.hexal.api.HexalAPI.modLoc
 import ram.talia.hexal.common.blocks.BlockMediafiedStorage
 import ram.talia.hexal.common.blocks.BlockRelay
 import ram.talia.hexal.common.blocks.BlockSlipway
+import ram.talia.hexal.common.lib.HexalBlocks.Companion.blockItem
 import java.util.function.BiConsumer
+import java.util.function.Consumer
+
 
 class HexalBlocks {
 
@@ -33,8 +38,16 @@ class HexalBlocks {
 			}
 		}
 
+		@JvmStatic
+		fun registerBlockCreativeTab(r: Consumer<Block>, tab: CreativeModeTab) {
+			for (block in BLOCK_TABS.getOrDefault(tab, mutableListOf())) {
+				r.accept(block)
+			}
+		}
+
         private val BLOCKS: MutableMap<ResourceLocation, Block> = LinkedHashMap()
 		private val BLOCK_ITEMS: MutableMap<ResourceLocation, Pair<Block, Item.Properties>> = LinkedHashMap()
+		private val BLOCK_TABS: MutableMap<CreativeModeTab, MutableList<Block>> = LinkedHashMap()
 
 		@JvmField
 		val SLIPWAY = blockNoItem("slipway", BlockSlipway(
@@ -51,7 +64,7 @@ class HexalBlocks {
 		@JvmField
 		val MEDIAFIED_STORAGE = blockItem("mediafied_storage", BlockMediafiedStorage(
 			BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PURPLE).sound(SoundType.AMETHYST).noOcclusion().strength(30.0f)
-		))
+		), HexCreativeTabs.HEX)
 
 		val RELAY = blockNoItem("relay", BlockRelay(
 			BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PURPLE).sound(SoundType.AMETHYST).noOcclusion().strength(3.0f)
@@ -64,14 +77,17 @@ class HexalBlocks {
 			return block
 		}
 
-		private fun <T : Block> blockItem(name: String, block: T): T {
-			return blockItem(name, block, HexItems.props())
+		private fun <T : Block> blockItem(name: String, block: T, tab: CreativeModeTab?): T {
+			return blockItem(name, block, HexItems.props(), tab)
 		}
 
-		private fun <T : Block> blockItem(name: String, block: T, props: Item.Properties): T {
+		private fun <T : Block> blockItem(name: String, block: T, props: Item.Properties, tab: CreativeModeTab?): T {
 			blockNoItem(name, block)
 			val old = BLOCK_ITEMS.put(modLoc(name), Pair(block, props))
 			require(old == null) { "Typo? Duplicate id $name" }
+			if (tab != null) {
+				BLOCK_TABS.computeIfAbsent(tab) { t -> ArrayList() }.add(block)
+			}
 			return block
 		}
 	}
