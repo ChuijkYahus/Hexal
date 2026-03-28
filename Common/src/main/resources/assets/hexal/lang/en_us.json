@@ -174,7 +174,8 @@
 
 
   "hexal.entry.slipways": "Slipways",
-  "hexal.page.slipways": "I have heard tales of some geodes in which glowing portals called slipways lie. These slipways are regularly depicted with glowing sparks surrounding them that bear an incredible resemblance to the $(l:patterns/spells/wisps)$(thing)wisps/$ that I have heard tell of, which may be a connection to look into.",
+  "hexal.page.slipways.0": "In my travels, I've noticed that certain geodes contain glowing portals which align with descriptions I've heard of something called a slipway.$(br2)These slipways emit glowing sparks that bear a striking resemblance to the $(l:patterns/spells/wisps)$(thing)wisps/$ that I've been able to produce artificially, though their behavior is much more chaotic.",
+  "hexal.page.slipways.1": "Unlike my own creations, these natural wisps seem to steadily $(o)gain/$ _media over time, though they still vanish after a short duration. I wonder if I could find a way to harness them...",
 
   "hexal.entry.relay": "Relay",
   "hexal.page.relay.0": "Often I wish to $(l:patterns/spells/links#hexal:link)$(action)link/$ together multiple $(l:patterns/spells/wisps)$(thing)wisps/$, so that they can share media and information over long distances. However running long chains of wisps to transfer these over great distances is inconvenient, and has great upkeep costs. To resolve this issue I have made Relays. Since they are solid blocks rather than media constructs themselves, they are able to maintain the links without any upkeep costs at all.",
