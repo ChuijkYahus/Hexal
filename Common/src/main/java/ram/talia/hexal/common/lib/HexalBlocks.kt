@@ -77,11 +77,11 @@ class HexalBlocks {
 			return block
 		}
 
-		private fun <T : Block> blockItem(name: String, block: T, tab: CreativeModeTab? = null): T {
+		private fun <T : Block> blockItem(name: String, block: T, tab: CreativeModeTab?): T {
 			return blockItem(name, block, HexItems.props(), tab)
 		}
 
-		private fun <T : Block> blockItem(name: String, block: T, props: Item.Properties, tab: CreativeModeTab? = null): T {
+		private fun <T : Block> blockItem(name: String, block: T, props: Item.Properties, tab: CreativeModeTab?): T {
 			blockNoItem(name, block)
 			val old = BLOCK_ITEMS.put(modLoc(name), Pair(block, props))
 			require(old == null) { "Typo? Duplicate id $name" }
