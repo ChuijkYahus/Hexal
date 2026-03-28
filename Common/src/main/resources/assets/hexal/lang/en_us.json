@@ -7,9 +7,9 @@
   "entity.hexal.wisp.ticking": "Cyclic Wisp",
   "entity.hexal.wisp.wandering": "Wandering Wisp",
 
-
-  "hexcasting.mishap.non_player": "%s expected to be cast by a player.",
-  "hexcasting.mishap.no_wisp": "%s expected to be cast by a wisp.",
+  "hexcasting.mishap.needs_caster": "Cannot be cast in a playerless context.",
+  "hexcasting.mishap.non_player": "Expected to be cast by a player.",
+  "hexcasting.mishap.no_wisp": "Expected to be cast by a wisp.",
   "hexcasting.mishap.others_wisp": "That wisp is owned by %s, not you.",
   "hexcasting.mishap.no_links": "%s has no links.",
   "hexcasting.mishap.self_link": "Tried to link %s to itself.",

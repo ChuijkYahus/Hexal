@@ -18,6 +18,7 @@ import ram.talia.hexal.api.HexalAPI
 import ram.talia.hexal.api.addBounded
 import ram.talia.hexal.api.casting.eval.env.WispCastEnv
 import ram.talia.hexal.api.casting.mishaps.MishapExcessiveReproduction
+import ram.talia.hexal.api.casting.mishaps.MishapNeedsCaster
 import ram.talia.hexal.api.config.HexalConfig
 import ram.talia.hexal.common.entities.ProjectileWisp
 import ram.talia.hexal.common.entities.TickingWisp
@@ -36,6 +37,10 @@ class OpSummonWisp(val ticking: Boolean) : SpellAction {
         val pos = args.getVec3(1, argc)
         val media: Double
         val cost: Long
+
+        if (env.castingEntity !is ServerPlayer) {
+            throw MishapNeedsCaster()
+        }
 
         if (env is WispCastEnv && env.wisp.summonedChildThisCast)
             throw MishapExcessiveReproduction(env.wisp) // wisps can only summon one child per cast.
@@ -76,7 +81,7 @@ class OpSummonWisp(val ticking: Boolean) : SpellAction {
             if (env is WispCastEnv)
                 env.wisp.summonedChildThisCast = true
 
-            val player = env.castingEntity as? ServerPlayer
+            val player = env.castingEntity as ServerPlayer
 
             val pigment = env.pigment
             val wisp = when (ticking) {
@@ -89,7 +94,7 @@ class OpSummonWisp(val ticking: Boolean) : SpellAction {
             env.world.addFreshEntity(wisp)
 
             // if the current cast is being debugged, try to spawn the wisp in debug mode too
-            if (HexDebugCoreAPI.INSTANCE.getDebugEnv(env) != null && player != null && wisp is TickingWisp) {
+            if (HexDebugCoreAPI.INSTANCE.getDebugEnv(env) != null && wisp is TickingWisp) {
                 val debugEnv = WispDebugEnv(player, wisp.uuid, ravenmind)
                 try {
                     HexDebugCoreAPI.INSTANCE.createDebugThread(debugEnv, null)
