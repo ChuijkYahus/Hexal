@@ -43,7 +43,7 @@ class OpBindStorage(private val isTemporaryBinding: Boolean) : SpellAction {
             val caster = env.caster ?: return null // TODO
 
             if (pos == null) {
-                MediafiedItemManager.setBoundStorage(caster, null)
+                if (!isTemporaryBinding) MediafiedItemManager.setBoundStorage(caster, null)
                 return null
             }
 
