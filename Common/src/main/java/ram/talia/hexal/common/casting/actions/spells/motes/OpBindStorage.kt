@@ -43,8 +43,14 @@ class OpBindStorage(private val isTemporaryBinding: Boolean) : SpellAction {
             val caster = env.caster ?: return null // TODO
 
             if (pos == null) {
-                if (!isTemporaryBinding) MediafiedItemManager.setBoundStorage(caster, null)
-                return null
+                if (!isTemporaryBinding) {
+                    MediafiedItemManager.setBoundStorage(caster, null)
+                    return null
+                } else {
+                    val userData = image.userData.copy()
+                    userData.remove(MoteIota.TAG_TEMP_STORAGE)
+                    return image.copy(userData = userData)
+                }
             }
 
             if (!env.canEditBlockAt(pos) || !IXplatAbstractions.INSTANCE.isInteractingAllowed(env.world, pos, Direction.UP, env.castingHand, env.caster))
