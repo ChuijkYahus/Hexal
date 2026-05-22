@@ -6,6 +6,7 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadBlock
 import net.minecraft.core.BlockPos
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.Vec3
 import ram.talia.hexal.api.config.HexalConfig
@@ -34,9 +35,11 @@ object OpPhaseBlock : SpellAction {
 
     private data class Spell(val pos: BlockPos, val ticks: Int) : RenderedSpell {
         override fun cast(env: CastingEnvironment) {
-            env.world.phaseBlock(pos, ticks)
-
-            IXplatAbstractions.INSTANCE.sendPacketTracking(pos, env.world, MsgPhaseBlockS2C(pos, ticks))
+            val blockstate = env.world.getBlockState(pos)
+            if (IXplatAbstractions.INSTANCE.isBreakingAllowed(env.world, pos, blockstate, env.castingEntity as? ServerPlayer)) {
+                env.world.phaseBlock(pos, ticks)
+                IXplatAbstractions.INSTANCE.sendPacketTracking(pos, env.world, MsgPhaseBlockS2C(pos, ticks))
+            }
         }
     }
 }

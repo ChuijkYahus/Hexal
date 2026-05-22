@@ -72,7 +72,12 @@ public class FabricHexalConfig extends PartitioningSerializer.GlobalData {
 
         private boolean generateSlipwayGeodes = DEFAULT_GENERATE_SLIPWAY_GEODES;
 
-        private long everbookMaxSize = DEFAULT_EVERBOOK_MAX_SIZE;
+        @ConfigEntry.Gui.CollapsibleObject
+        private MiscValues miscValues = new MiscValues();
+
+        static class MiscValues {
+            long everbookMaxSize = DEFAULT_EVERBOOK_MAX_SIZE;
+        }
 
         @ConfigEntry.Gui.CollapsibleObject
         private MiscSpells miscSpells = new MiscSpells();
@@ -196,7 +201,7 @@ public class FabricHexalConfig extends PartitioningSerializer.GlobalData {
 
         @Override
         public void validatePostLoad() throws ValidationException {
-            this.everbookMaxSize = bound(this.everbookMaxSize, 0L, DEFAULT_EVERBOOK_MAX_SIZE * 1024);
+            this.miscValues.everbookMaxSize = bound(this.miscValues.everbookMaxSize, 0L, DEFAULT_EVERBOOK_MAX_SIZE * 1024);
             // costs of misc spells
             this.miscSpells.fallingBlockCost = bound(this.miscSpells.fallingBlockCost, DEF_MIN_COST, DEF_MAX_COST);
             this.miscSpells.freezeCost = bound(this.miscSpells.freezeCost, DEF_MIN_COST, DEF_MAX_COST);
@@ -280,7 +285,7 @@ public class FabricHexalConfig extends PartitioningSerializer.GlobalData {
 
         @Override
         public long getEverbookMaxSize() {
-            return everbookMaxSize;
+            return miscValues.everbookMaxSize;
         }
 
         @Override
