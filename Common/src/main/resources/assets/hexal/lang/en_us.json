@@ -262,7 +262,7 @@
   "hexal.page.gates.gate/unmark": "Consumes a gate iota and an entity. Unmarks that entity so that if it was marked with $(l:patterns/great_spells/gates#hexal:gate/mark)$(action) Gate's Opening/$ it will no longer be teleported the next time that gate is closed.",
   "hexal.page.gates.gate/mark/num/get": "Consumes a gate iota, returns how many entities are marked by that gate.",
   "hexal.page.gates.gate/mark/get": "Consumes a gate iota and an entity, returns whether that entity is marked by that gate.",
-  "hexal.page.gates.gate/close": "Consumes a non-drifing gate iota, or a drifting gate iota and a position. Transports all the entities marked with the passed gate to the stored or given position, as relevant. Costs half an $(l:items/amethyst)$(item)Amethyst Shard/$, plus an $(l:items/amethyst)$(item)Amethyst Dust/$ per metre transported per entity if the gate was drifting.",
+  "hexal.page.gates.gate/close": "Consumes a non-drifing gate iota, or a drifting gate iota and a position. Transports all the entities marked with the passed gate to the stored or given position. Costs half an $(l:items/amethyst)$(item)Amethyst Shard/$, plus one tenth of an $(l:items/amethyst)$(item)Amethyst Dust/$ per metre transported per entity if the gate was drifting.",
   "hexal.page.gates.gate/closeable": "Consumes a gate iota, returns whether that gate has a valid destination. The destination may be invalid if it's outside the world, or if the entity used to create an entity-anchored gate is unloaded or no longer exists.",
 
   "hexal.entry.motes": "Motes",
