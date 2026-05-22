@@ -56,8 +56,9 @@ object LinkableTypes {
 		override fun matchSync(centre: ILinkable.IRenderCentre, tag: Tag) = (centre as PlayerLinkstore.RenderCentre).player.id == tag.asInt
 		override val canCast = true
 
-		override fun linkableFromCastingContext(env: CastingEnvironment)
-			= IXplatAbstractions.INSTANCE.getLinkstore(env.caster)
+		override fun linkableFromCastingContext(env: CastingEnvironment): PlayerLinkstore? {
+			return (env.castingEntity as? ServerPlayer)?.let { IXplatAbstractions.INSTANCE.getLinkstore(it) }
+		}
 
 		override val castingContextPriority = -100
 

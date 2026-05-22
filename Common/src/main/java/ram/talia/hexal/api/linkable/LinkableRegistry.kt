@@ -7,6 +7,7 @@ import net.minecraft.nbt.Tag
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.level.Level
+import ram.talia.hexal.api.casting.mishaps.MishapNeedsCaster
 
 object LinkableRegistry {
 	const val TAG_TYPE = "type"
@@ -195,7 +196,8 @@ object LinkableRegistry {
 	@JvmStatic
 	fun linkableFromCastingEnvironment(env: CastingEnvironment): ILinkable {
 		castingContextExtractionQueue.forEach { type -> type.linkableFromCastingContext(env)?.let { return it } }
-		throw Exception("At least one type should have accepted the env and returned itself (namely the player type).")
+		// If no type accepted the env and returned itself, the env must be playerless.
+		throw MishapNeedsCaster()
 	}
 
 	@JvmStatic
