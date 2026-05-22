@@ -10,5 +10,6 @@ import ram.talia.hexal.common.lib.HexalBlocks
 class HexalLootTables : PaucalLootTableSubProvider(HexalAPI.MOD_ID) {
     override fun makeLootTables(blockTables: MutableMap<Block, LootTable.Builder>, lootTables: MutableMap<ResourceLocation, LootTable.Builder>) {
         dropSelf(blockTables, HexalBlocks.MEDIAFIED_STORAGE)
+        dropSelf(blockTables, HexalBlocks.RELAY)
     }
 }
