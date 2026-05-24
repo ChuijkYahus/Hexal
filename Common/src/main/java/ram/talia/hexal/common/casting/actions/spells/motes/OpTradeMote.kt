@@ -11,9 +11,11 @@ import net.minecraft.stats.Stats
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.trading.MerchantOffer
 import net.minecraft.world.item.trading.MerchantOffers
+import net.minecraft.server.level.ServerPlayer
 import ram.talia.hexal.api.HexalAPI
 import ram.talia.hexal.api.casting.castables.VarargConstMediaAction
 import ram.talia.hexal.api.casting.iota.MoteIota
+import ram.talia.hexal.api.casting.mishaps.MishapBadTrade
 import ram.talia.hexal.api.casting.mishaps.MishapNoBoundStorage
 import ram.talia.hexal.api.casting.mishaps.MishapStorageFull
 import ram.talia.hexal.api.config.HexalConfig
@@ -37,16 +39,11 @@ object OpTradeMote : VarargConstMediaAction {
         val toTradeItemIotas = args.getMoteOrMoteList(1, argc)?.map({ listOf(it) }, { it }) ?: return emptyList<Iota>().asActionResult
         val tradeIndex = if (args.size == 3) args.getPositiveIntUnder(2, villager.offers.size, argc) else null
 
-        if (toTradeItemIotas.isEmpty())
+        if (toTradeItemIotas.isEmpty() || toTradeItemIotas.size > 2)
             throw MishapInvalidIota.of(args[1], if (args.size == 3) 1 else 0, "villager_trade")
 
-        if (toTradeItemIotas.size > 1) {
-            for (i in toTradeItemIotas.indices) {
-                for (j in toTradeItemIotas.indices) {
-                    if (i != j && toTradeItemIotas[i].itemIndex == toTradeItemIotas[j].itemIndex)
-                        throw MishapInvalidIota.of(args[1], if (args.size == 3) 1 else 0, "mote_duplicated")
-                }
-            }
+        if (toTradeItemIotas.size == 2 && toTradeItemIotas[0].itemIndex == toTradeItemIotas[1].itemIndex) {
+            throw MishapInvalidIota.of(args[1], if (args.size == 3) 1 else 0, "mote_duplicated")
         }
 
         env.assertEntityInRange(villager)
@@ -54,8 +51,8 @@ object OpTradeMote : VarargConstMediaAction {
         val storage = if (userData.contains(MoteIota.TAG_TEMP_STORAGE))
             userData.getUUID(MoteIota.TAG_TEMP_STORAGE)
         else
-            env.caster?.let { MediafiedItemManager.getBoundStorage(it) }
-                    ?: throw MishapNoBoundStorage()
+            (env.castingEntity as? ServerPlayer)?.let { MediafiedItemManager.getBoundStorage(it) }
+                ?: throw MishapNoBoundStorage()
         if (!MediafiedItemManager.isStorageLoaded(storage))
             throw MishapNoBoundStorage("storage_unloaded")
 
@@ -67,8 +64,8 @@ object OpTradeMote : VarargConstMediaAction {
         if (villager.offers.isEmpty())
             return emptyList<Iota>().asActionResult
 
-        env.caster?.let { villager.updateSpecialPrices(it) }
-        villager.tradingPlayer = env.caster
+        (env.castingEntity as? ServerPlayer)?.let { villager.updateSpecialPrices(it) }
+        villager.tradingPlayer = env.castingEntity as? ServerPlayer
 
         var outRecord: ItemRecord? = null
 
@@ -82,12 +79,19 @@ object OpTradeMote : VarargConstMediaAction {
             val merchantoffer = if (tradeIndex != null)
                     offers.getRecipeFor(toTrade0, toTrade1, tradeIndex) ?: offers.getRecipeFor(toTrade1, toTrade0, tradeIndex) ?: break
                 else getFirstMatchingInStockOffer(offers, toTrade0, toTrade1) ?: break
-            if (merchantoffer.isOutOfStock)
-                break
+            if (outRecord == null) { // if this is the first attempt, mishap if the trade isn't possible
+                if (!enoughToPay(merchantoffer, toTradeItemIotas))
+                    throw MishapBadTrade("not_enough_payment", args[1])
+                if (merchantoffer.isOutOfStock)
+                    throw MishapBadTrade("out_of_stock", args[1])
+            } else { // if we've already traded at least once, just break the loop if the trade isn't possible
+                if (!enoughToPay(merchantoffer, toTradeItemIotas) || merchantoffer.isOutOfStock)
+                    break
+            }
 
             if (merchantoffer.take(toTrade0, toTrade1) || merchantoffer.take(toTrade1, toTrade0)) {
                 villager.notifyTrade(merchantoffer)
-                env.caster?.awardStat(Stats.TRADED_WITH_VILLAGER)
+                (env.castingEntity as? ServerPlayer)?.awardStat(Stats.TRADED_WITH_VILLAGER)
 
                 if (outRecord == null)
                     outRecord = ItemRecord(merchantoffer.result)
@@ -107,6 +111,12 @@ object OpTradeMote : VarargConstMediaAction {
         villager.stopTrading()
 
         return outRecord?.let { record -> MoteIota.makeIfStorageLoaded(record, storage)?.let{ listOf(it) } } ?: null.asActionResult
+    }
+
+    private fun enoughToPay(offer: MerchantOffer, toTradeItemIotas: List<MoteIota>): Boolean {
+        val enoughA = (toTradeItemIotas.getOrNull(0)?.count ?: 0) >= offer.costA.count
+        val enoughB = (toTradeItemIotas.getOrNull(1)?.count ?: 0) >= offer.costB.count
+        return enoughA && enoughB
     }
 
     private fun getFirstMatchingInStockOffer(offers: MerchantOffers, toTrade0: ItemStack, toTrade1: ItemStack): MerchantOffer? {
